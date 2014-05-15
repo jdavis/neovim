@@ -8,6 +8,7 @@ local inspect = require "inspect"
 local OBJ1 = {object = 1}
 local OBJ2 = {object = 2}
 local OBJ3 = {object = 3}
+local OBJ4 = {object = 4}
 
 
 describe("Set helper class", function()
@@ -20,18 +21,18 @@ describe("Set helper class", function()
     describe("can add objects", function()
         it("should not allow duplication", function()
             set:add(OBJ1)
-            assert.are.same(set:size(), 1)
+            assert.are.same(1, set:size())
 
             set:add(OBJ1)
-            assert.are.same(set:size(), 1)
+            assert.are.same(1, set:size())
         end)
 
         it("should update the size on add", function()
             set:add(OBJ1)
-            assert.are.same(set:size(), 1)
+            assert.are.same(1, set:size())
 
             set:add(OBJ2)
-            assert.are.same(set:size(), 2)
+            assert.are.same(2, set:size())
         end)
     end)
 
@@ -41,10 +42,10 @@ describe("Set helper class", function()
             set:add(OBJ2)
 
             set:remove(OBJ2)
-            assert.are.same(set:size(), 1)
+            assert.are.same(1, set:size())
 
             set:remove(OBJ1)
-            assert.are.same(set:size(), 0)
+            assert.are.same(0, set:size())
         end)
 
         it("should not change removing invalid item", function()
@@ -52,10 +53,10 @@ describe("Set helper class", function()
             set:add(OBJ2)
 
             set:remove(OBJ2)
-            assert.are.same(set:size(), 1)
+            assert.are.same(1, set:size())
 
             set:remove(OBJ2)
-            assert.are.same(set:size(), 1)
+            assert.are.same(1, set:size())
         end)
     end)
 
@@ -66,7 +67,7 @@ describe("Set helper class", function()
             set:union(empty)
 
             expected = Set()
-            assert.are.same(set, expected)
+            assert.are.same(expected, set)
         end)
 
         it("should union one empty set", function()
@@ -81,7 +82,7 @@ describe("Set helper class", function()
             expected:add(OBJ1)
             expected:add(OBJ2)
 
-            assert.are.same(set, expected)
+            assert.are.same(expected, set)
         end)
 
         it("should union two sets", function()
@@ -99,7 +100,48 @@ describe("Set helper class", function()
             expected:add(OBJ2)
             expected:add(OBJ3)
 
-            assert.are.same(set, expected)
+            assert.are.same(expected, set)
+        end)
+    end)
+
+    describe("can union a table", function()
+        it("should union one empty set and one empty table", function()
+            empty = {}
+
+            set:union_table(empty)
+
+            expected = Set()
+            assert.are.same(expected, set)
+        end)
+
+        it("should union one empty table", function()
+            empty = {}
+
+            set:add(OBJ1)
+            set:add(OBJ2)
+
+            set:union_table(empty)
+
+            expected = Set()
+            expected:add(OBJ1)
+            expected:add(OBJ2)
+
+            assert.are.same(expected, set)
+        end)
+
+        it("should union one table", function()
+            tbl = {OBJ2, OBJ3}
+
+            set:add(OBJ1)
+
+            set:union_table(tbl)
+
+            expected = Set()
+            expected:add(OBJ1)
+            expected:add(OBJ2)
+            expected:add(OBJ3)
+
+            assert.are.same(expected, set)
         end)
     end)
 
@@ -116,7 +158,7 @@ describe("Set helper class", function()
             expected:add(OBJ1)
             expected:add(OBJ2)
 
-            assert.are.same(set, expected)
+            assert.are.same(expected, set)
         end)
 
         it("should be empty when diffing self", function()
@@ -132,7 +174,7 @@ describe("Set helper class", function()
 
             expected = Set()
 
-            assert.are.same(set, expected)
+            assert.are.same(expected, set)
         end)
 
         it("should diff two sets", function()
@@ -148,7 +190,7 @@ describe("Set helper class", function()
             expected = Set()
             expected:add(OBJ1)
 
-            assert.are.same(set, expected)
+            assert.are.same(expected, set)
         end)
     end)
 
@@ -167,6 +209,59 @@ describe("Set helper class", function()
     end)
 
     describe("can iterate over the set", function()
-        pending("I'll do this later...")
+        it("shouldn't iterate over an empty set", function()
+            local count = 0
+
+            for k,v in set:iterator() do
+                count = count + 1
+            end
+
+            assert.are.same(0, count)
+        end)
+
+        it("should iterate over all items in the set", function()
+            set:add(OBJ1)
+            set:add(OBJ2)
+            set:add(OBJ3)
+            set:add(OBJ4)
+
+            set:remove(OBJ4)
+
+            second = Set()
+
+            for k,v in set:iterator() do
+                second:add(v)
+            end
+
+            expected = Set()
+            expected:add(OBJ1)
+            expected:add(OBJ2)
+            expected:add(OBJ3)
+
+            assert.are.same(expected, set)
+        end)
+    end)
+
+    describe("can convert to table", function()
+        it("should return empty table", function()
+            result = set:to_table()
+
+            expected = {}
+            assert.are.same(expected, result)
+        end)
+
+        it("should return table without gaps", function()
+            set:add(OBJ1)
+            set:add(OBJ2)
+            set:add(OBJ3)
+
+            set:remove(OBJ1)
+            set:remove(OBJ3)
+
+            result = set:to_table()
+
+            expected = {OBJ2}
+            assert.are.same(expected, result)
+        end)
     end)
 end)

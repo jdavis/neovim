@@ -82,28 +82,23 @@ function Set:iterator()
 end
 
 function Set:to_table()
-    local keys
-    do
-        local _accum_0 = { }
-        local _len_0 = 1
-        for idx, _ in pairs(self.tbl) do
-            _accum_0[_len_0] = idx
-            _len_0 = _len_0 + 1
-        end
-        keys = _accum_0
+    -- there might be gaps in @tbl, so we have to be careful and sort first
+    local keys = {}
+    local len = 1
+    for idx, _ in pairs(self.tbl) do
+        keys[len] = idx
+        len = len + 1
     end
+
     table.sort(keys)
-    local copy
-    do
-        local _accum_0 = { }
-        local _len_0 = 1
-        for _index_0 = 1, #keys do
-            local idx = keys[_index_0]
-            _accum_0[_len_0] = self.tbl[idx]
-            _len_0 = _len_0 + 1
-        end
-        copy = _accum_0
+
+    local copy = {}
+    local len = 1
+    for _, idx in ipairs(keys) do
+        copy[len] = self.tbl[idx]
+        len = len + 1
     end
+
     return copy
 end
 

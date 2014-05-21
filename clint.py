@@ -627,7 +627,7 @@ class FileInfo:
     return os.path.abspath(self._filename).replace('\\', '/')
 
   def RelativePath(self):
-    """FullName with /home/julian/c/neovim/src/ chopped off."""
+    """FullName with <prefix>/src/nvim/ chopped off."""
     fullname = self.FullName()
 
     if os.path.exists(fullname):
@@ -639,7 +639,7 @@ class FileInfo:
         root_dir = os.path.dirname(root_dir)
 
       if os.path.exists(os.path.join(root_dir, ".git")):
-        root_dir = os.path.join(root_dir, "src")
+        root_dir = os.path.join(root_dir, "src", "nvim")
         prefix = os.path.commonprefix([root_dir, project_dir])
         return fullname[len(prefix) + 1:]
 
@@ -1038,7 +1038,7 @@ def GetHeaderGuardCPPVariable(filename):
 
   fileinfo = FileInfo(filename)
   file_path_from_root = fileinfo.RelativePath()
-  return 'NEOVIM_' + re.sub(r'[-./\s]', '_', file_path_from_root).upper()
+  return 'NVIM_' + re.sub(r'[-./\s]', '_', file_path_from_root).upper()
 
 
 def CheckForHeaderGuard(filename, lines, error):
@@ -2307,7 +2307,8 @@ def CheckBraces(filename, clean_lines, linenum, error):
                'TEST', 'TEST_F', 'MATCHER', 'MATCHER_P', 'TYPED_TEST',
                'EXCLUSIVE_LOCKS_REQUIRED', 'SHARED_LOCKS_REQUIRED',
                'LOCKS_EXCLUDED', 'INTERFACE_DEF')) or
-          Search(r'\s+=\s*$', line_prefix)):
+          Search(r'\s+=\s*$', line_prefix) or
+          Search(r'^\s*return\s*$', line_prefix)):
         match = None
 
   else:

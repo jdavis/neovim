@@ -114,6 +114,7 @@ function Set:to_table()
 end
 
 Set = setmetatable(Set, {
+  __index = {},
   __call = function(cls, ...)
     local self = setmetatable({}, Set)
     cls.new(self, ...)

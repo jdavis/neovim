@@ -1,5 +1,4 @@
-local Set = require "set"
-local inspect = require "inspect"
+local Set = require "test.lib.Set"
 
 --
 -- Basic objects to populate the Set

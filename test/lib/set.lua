@@ -5,8 +5,9 @@
 -- 1) index => item
 -- 2) item => index
 
-local Set = {}
-Set.__index = Set
+local Class = require "test.lib.Class"
+
+Set = Class()
 
 function Set:new(items)
   if type(items) == 'table' then
@@ -112,14 +113,5 @@ function Set:to_table()
 
   return copy
 end
-
-Set = setmetatable(Set, {
-  __index = {},
-  __call = function(cls, ...)
-    local self = setmetatable({}, Set)
-    cls.new(self, ...)
-    return self
-  end
-})
 
 return Set

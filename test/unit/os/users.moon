@@ -1,4 +1,4 @@
-{:cimport, :internalize, :eq, :ffi, :lib, :cstr} = require 'test.unit.helpers'
+{:cimport, :internalize, :eq, :ffi, :lib, :cstr} = require 'test.lib.helpers'
 
 users = cimport './src/nvim/os/os.h', 'unistd.h'
 

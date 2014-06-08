@@ -1,8 +1,8 @@
 ffi = require 'ffi'
 lpeg = require 'lpeg'
-formatc = require 'test.unit.formatc'
-Set = require 'test.unit.set'
-Preprocess = require 'test.unit.preprocess'
+formatc = require 'test.lib.formatc'
+Set = require 'test.lib.set'
+Preprocess = require 'test.lib.preprocess'
 Paths = require 'test.config.paths'
 
 -- add some standard header locations

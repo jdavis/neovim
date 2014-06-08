@@ -1,4 +1,4 @@
-{:cimport, :cppimport, :internalize, :eq, :neq, :ffi, :lib, :cstr, :to_cstr} = require 'test.unit.helpers'
+{:cimport, :cppimport, :internalize, :eq, :neq, :ffi, :lib, :cstr, :to_cstr} = require 'test.lib.helpers'
 require 'lfs'
 require 'bit'
 

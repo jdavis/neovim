@@ -1,4 +1,4 @@
-{:cimport, :internalize, :eq, :ffi, :lib, :cstr, :to_cstr} = require 'test.unit.helpers'
+{:cimport, :internalize, :eq, :ffi, :lib, :cstr, :to_cstr} = require 'test.lib.helpers'
 require 'lfs'
 
 env = cimport './src/nvim/os/os.h'
